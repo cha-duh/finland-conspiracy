@@ -159,11 +159,7 @@
     100% { opacity: 1; transform: var(--stamp-final-transform) scale(1); }
   }
   /* per-stamp final transforms stored as custom properties so keyframes can compose */
-  .stamp-a { --stamp-final-transform: rotate(-12deg); }
-  .stamp-b { --stamp-final-transform: rotate(-9deg); }
-  .stamp-c { --stamp-final-transform: rotate(-7deg); }
-  .stamp-d { --stamp-final-transform: rotate(-11deg); }
-  .stamp-e { --stamp-final-transform: rotate(-8deg); }
+  /* stamp rotations randomized at runtime via JS */
   /* Stamps wait for a click/key — only fire once the slide gets .stamp-fired */
   section.is-active.stamp-fired .tx-stamp { animation: tx-stamp 900ms cubic-bezier(.3,1.6,.4,1) forwards; }
 
@@ -303,11 +299,11 @@
   }
 
   /* stamp scale steps */
-  .stamp-a { font-size: 96px; top: 620px; right: 130px; transform: rotate(-12deg); }
-  .stamp-b { font-size: 150px; top: 520px; right: 100px; transform: rotate(-9deg); }
-  .stamp-c { font-size: 220px; top: 360px; right: 120px; transform: rotate(-7deg); }
-  .stamp-d { font-size: 320px; top: 240px; left: 220px; transform: rotate(-11deg); }
-  .stamp-e { font-size: 480px; top: 200px; left: 160px; transform: rotate(-8deg); opacity: 0.92; }
+  .stamp-a { font-size: 96px; top: 620px; right: 130px; }
+  .stamp-b { font-size: 150px; top: 520px; right: 100px; }
+  .stamp-c { font-size: 220px; top: 360px; right: 120px; }
+  .stamp-d { font-size: 320px; top: 240px; left: 220px; }
+  .stamp-e { font-size: 480px; top: 200px; left: 160px; opacity: 0.92; }
 
   /* ---------- image placeholder / bg utility ---------- */
   .imgfill {
@@ -484,7 +480,7 @@
     background: #0e1012;
   }
   .exhibit .caption {
-    position: absolute; left: 20px; bottom: 72px;
+    position: absolute; left: 20px; bottom: 82px;
     font-family: "JetBrains Mono", monospace;
     font-size: 24px; letter-spacing: 0.18em; text-transform: uppercase;
     color: rgba(243,237,226,0.85);
@@ -1084,6 +1080,17 @@
 
 <script>
   // ============================================================
+  // STAMP ROTATION RANDOMIZER
+  // Sets a random angle between -30 and +30 degrees for each stamp on load.
+  (function () {
+    document.querySelectorAll('.stamp').forEach(function (el) {
+      var angle = (Math.random() * 60 - 30).toFixed(1);
+      var transform = 'rotate(' + angle + 'deg)';
+      el.style.setProperty('--stamp-final-transform', transform);
+      el.style.transform = transform;
+    });
+  })();
+
   // TRANSITION DRIVER
   // Toggles .is-active on the currently-visible slide so tx-*
   // animations replay on every navigation (incl. backward).
